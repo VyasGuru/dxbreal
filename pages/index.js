@@ -1,115 +1,87 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { useState } from "react";
+import '@/styles/globals.css';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+export default function App({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export default function Home() {
+  const [askingPrice, setAskingPrice] = useState(1000000);
+  const [monthlyRent, setMonthlyRent] = useState(5000);
+  const [interestRate, setInterestRate] = useState(3.5);
+  const [serviceCharge, setServiceCharge] = useState(2.0);
+  const [maintenanceCharge, setMaintenanceCharge] = useState(3000);
+  const [loanTenure, setLoanTenure] = useState(25);
+  const [loanRatio] = useState(0.8);
+
+  const loanAmount = askingPrice * loanRatio;
+  const downPayment = askingPrice - loanAmount;
+  const monthlyInterest = (interestRate / 100) / 12;
+  const totalMonths = loanTenure * 12;
+
+  const emi = loanAmount * monthlyInterest * Math.pow(1 + monthlyInterest, totalMonths) / (Math.pow(1 + monthlyInterest, totalMonths) - 1);
+  const annualEMI = emi * 12;
+
+  const annualRent = monthlyRent * 12;
+  const totalAnnualCharges = (serviceCharge / 100 * askingPrice) + maintenanceCharge;
+  const netAnnualIncome = annualRent - totalAnnualCharges - annualEMI;
+  const roi = (netAnnualIncome / (downPayment + totalAnnualCharges)) * 100;
+
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              pages/index.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    <main className="min-h-screen bg-gradient-to-br from-sky-100 via-white to-indigo-100 text-gray-900 px-4 py-8">
+      <div className="max-w-5xl mx-auto grid gap-10">
+        <h1 className="text-4xl font-extrabold text-indigo-700 text-center">🏙️ Dubai Property ROI Calculator</h1>
+
+        <section className="bg-white rounded-2xl shadow-lg p-8 space-y-6 border border-indigo-200">
+          <h2 className="text-2xl font-semibold text-indigo-600">🏗️ Property & Loan Details</h2>
+          <div className="grid sm:grid-cols-2 gap-6">
+            <Input label="Asking Price (AED)" value={askingPrice} onChange={setAskingPrice} />
+            <Input label="Monthly Rent (AED)" value={monthlyRent} onChange={setMonthlyRent} />
+            <Input label="Interest Rate (%)" value={interestRate} onChange={setInterestRate} />
+            <Input label="Service Charge (%)" value={serviceCharge} onChange={setServiceCharge} />
+            <Input label="Maintenance Charge (AED/year)" value={maintenanceCharge} onChange={setMaintenanceCharge} />
+            <Input label="Loan Tenure (Years)" value={loanTenure} onChange={setLoanTenure} />
+          </div>
+        </section>
+
+        <section className="bg-indigo-50 rounded-2xl shadow p-8 space-y-4 border border-indigo-200">
+          <h2 className="text-2xl font-semibold text-indigo-700">📈 ROI Summary</h2>
+          <ul className="grid sm:grid-cols-2 gap-4 text-lg font-medium">
+            <Info label="Loan Amount" value={`AED ${loanAmount.toFixed(0)}`} />
+            <Info label="Down Payment" value={`AED ${downPayment.toFixed(0)}`} />
+            <Info label="Monthly EMI" value={`AED ${emi.toFixed(0)}`} />
+            <Info label="Annual EMI" value={`AED ${annualEMI.toFixed(0)}`} />
+            <Info label="Annual Rent" value={`AED ${annualRent.toFixed(0)}`} />
+            <Info label="Service + Maintenance Charges" value={`AED ${totalAnnualCharges.toFixed(0)}`} />
+            <Info label="Net Annual Income" value={`AED ${netAnnualIncome.toFixed(0)}`} />
+            <Info label="ROI" value={`${roi.toFixed(2)}%`} highlight />
+          </ul>
+        </section>
+      </div>
+    </main>
+  );
+}
+
+function Input({ label, value, onChange }) {
+  return (
+    <label className="block">
+      <span className="text-sm text-gray-700 font-semibold">{label}</span>
+      <input
+        type="number"
+        value={value}
+        onChange={(e) => onChange(+e.target.value)}
+        className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2 text-base shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+      />
+    </label>
+  );
+}
+
+function Info({ label, value, highlight }) {
+  return (
+    <li className={`p-4 rounded-xl ${highlight ? "bg-indigo-100 text-indigo-900 font-bold border border-indigo-400" : "bg-white border border-gray-200"}`}>
+      <span className="block text-sm text-gray-600">{label}</span>
+      <span className="text-lg">{value}</span>
+    </li>
   );
 }
