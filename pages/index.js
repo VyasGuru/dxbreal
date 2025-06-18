@@ -1,10 +1,6 @@
-import { useState } from "react";
-import '@/styles/globals.css';
+// pages/index.js or pages/index.jsx
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
-}
-
+import React, { useState } from "react";
 
 export default function Home() {
   const [askingPrice, setAskingPrice] = useState(1000000);
@@ -19,10 +15,8 @@ export default function Home() {
   const downPayment = askingPrice - loanAmount;
   const monthlyInterest = (interestRate / 100) / 12;
   const totalMonths = loanTenure * 12;
-
   const emi = loanAmount * monthlyInterest * Math.pow(1 + monthlyInterest, totalMonths) / (Math.pow(1 + monthlyInterest, totalMonths) - 1);
   const annualEMI = emi * 12;
-
   const annualRent = monthlyRent * 12;
   const totalAnnualCharges = (serviceCharge / 100 * askingPrice) + maintenanceCharge;
   const netAnnualIncome = annualRent - totalAnnualCharges - annualEMI;
@@ -31,7 +25,9 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-sky-100 via-white to-indigo-100 text-gray-900 px-4 py-8">
       <div className="max-w-5xl mx-auto grid gap-10">
-        <h1 className="text-4xl font-extrabold text-indigo-700 text-center">🏙️ Dubai Property ROI Calculator</h1>
+        <h1 className="text-4xl font-extrabold text-indigo-700 text-center">
+          🏙️ Dubai Property ROI Calculator
+        </h1>
 
         <section className="bg-white rounded-2xl shadow-lg p-8 space-y-6 border border-indigo-200">
           <h2 className="text-2xl font-semibold text-indigo-600">🏗️ Property & Loan Details</h2>
@@ -66,12 +62,12 @@ export default function Home() {
 function Input({ label, value, onChange }) {
   return (
     <label className="block">
-      <span className="text-sm text-gray-700 font-semibold">{label}</span>
+      <span className="text-gray-700 font-medium">{label}</span>
       <input
         type="number"
         value={value}
-        onChange={(e) => onChange(+e.target.value)}
-        className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2 text-base shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-1 block w-full rounded-xl border border-indigo-300 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none p-2"
       />
     </label>
   );
@@ -79,9 +75,9 @@ function Input({ label, value, onChange }) {
 
 function Info({ label, value, highlight }) {
   return (
-    <li className={`p-4 rounded-xl ${highlight ? "bg-indigo-100 text-indigo-900 font-bold border border-indigo-400" : "bg-white border border-gray-200"}`}>
-      <span className="block text-sm text-gray-600">{label}</span>
-      <span className="text-lg">{value}</span>
+    <li className={`p-4 rounded-lg ${highlight ? "bg-indigo-100 text-indigo-800 font-bold" : "bg-white text-gray-700"}`}>
+      <span className="block text-sm">{label}</span>
+      <span className="text-xl">{value}</span>
     </li>
   );
 }
